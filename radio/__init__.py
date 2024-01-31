@@ -8,11 +8,9 @@ app = Flask(__name__)
 
 def genHeader(sampleRate, bitsPerSample, channels, samples):
     # Some veeery big number here instead of: #samples * channels * bitsPerSample // 8
-    datasize = 10240000
+    DATA_SIZE = 102400000
     o = bytes("RIFF", "ascii")  # (4byte) Marks file as RIFF
-    o += (datasize + 36).to_bytes(
-        4, "little"
-    )  # (4byte) File size in bytes excluding this and RIFF marker
+    o += (DATA_SIZE + 36).to_bytes(4, "little")  # (4byte) File size in bytes excluding this and RIFF marker
     o += bytes("WAVE", "ascii")  # (4byte) File type
     o += bytes("fmt ", "ascii")  # (4byte) Format Chunk Marker
     o += (16).to_bytes(4, "little")  # (4byte) Length of above format data
@@ -23,7 +21,7 @@ def genHeader(sampleRate, bitsPerSample, channels, samples):
     o += (channels * bitsPerSample // 8).to_bytes(2, "little")  # (2byte)
     o += (bitsPerSample).to_bytes(2, "little")  # (2byte)
     o += bytes("data", "ascii")  # (4byte) Data Chunk Marker
-    o += (datasize).to_bytes(4, "little")  # (4byte) Data size in bytes
+    o += DATA_SIZE.to_bytes(4, "little")  # (4byte) Data size in bytes
     return o
 
 
